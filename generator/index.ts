@@ -1,14 +1,14 @@
-const tiles = require('./tileLibrary').default;
+import {tiles} from './tileLibrary';
 // console.log(tiles);
 
 // ToDo Добавить предсказуемый генератор рандомных чисел, что бы можно было строить "миры" по seed'у
 // ToDo Превратить всю эту кашу в класс Grid с основным методом generate... Нужно немного (много) рефакторинга
 
 
-let prevMistake = '';
+let prevMistake: string = '';
 
-let sameMistakeCount = 0;
-const codes = tiles.map(el => el.code);
+let sameMistakeCount: number = 0;
+const codes: string[] = tiles.map(el => el.code);
 
 const tilesByCode = tiles.reduce((res, el) => ({...res, [el.code]: el}), {});
 const LEFT_IDX = 0, TOP_IDX = 1, RIGHT_IDX = 2, BOTTOM_IDX = 3;
@@ -31,7 +31,7 @@ const possibleNbsByCode = {
 	}, {})
 };
 
-function arrayIntersect() {
+function arrayIntersect(...args: any) {
 	let result = [];
 	let lists;
 
@@ -147,7 +147,7 @@ function resolveRandom(grid, size) {
 				hasLeft = !!grid[i][j-1] && !!grid[i][j-1],
 				hasRight = !!grid[i][j+1] && !!grid[i][j+1];
 			if (!grid[i][j]) {
-				emptyCells.push({i,j, entrop: [hasBottom, hasLeft, hasRight, hasTop].reduce((res,el) => res+el, 0)})
+				emptyCells.push({i,j, entrop: [hasBottom, hasLeft, hasRight, hasTop].reduce((res,el) => res + Number(el), 0)})
 			}
 		}
 	}
@@ -204,7 +204,7 @@ function resolveRandom(grid, size) {
 	// После каждого установленного тайла проверяю что я не сделал карту "невозможной"
 	if (checkValid(grid, SIZE) === false) {
 		console.warn('made a mistake, reverting', {i, j, emptyCells, possibleTiles, nbs: {topNb, bottomNb, leftNb, rightNb}});
-		exports.print(grid, true);
+		print(grid, true);
 		grid[i][j] = undefined;
 		// На всякий случай обнуляю еще и соседей - они привели к выбору невозможного тайла и могут сделать это еще раз
 		if (topNb) grid[i-1][j] = undefined;
@@ -223,7 +223,7 @@ function resolveRandom(grid, size) {
 	return remainingCellCount;
 }
 
-exports.generate = function(size) {
+export function generate (size) {
 
 	console.log('--->>>>>  generating');
 
@@ -247,7 +247,7 @@ exports.generate = function(size) {
 	return grid;
 };
 
-exports.print = function(grid, indexed = false) {
+export function print(grid, indexed = false) {
 
 	console.log('--->>>>>  printing');
 

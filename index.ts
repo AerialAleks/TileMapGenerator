@@ -1,6 +1,6 @@
-const mapGenerator = require('./generator/index');
-const  http = require('http');
-const url = require('url');
+import * as mapGenerator from './generator'
+import * as http from 'http';
+// const url = require('url');
 
 const VER = 'v0.1.0';
 const PORT = process.env.PORT && Number(process.env.PORT) || 8080;

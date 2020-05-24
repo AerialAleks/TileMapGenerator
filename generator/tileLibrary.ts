@@ -1,4 +1,4 @@
-exports.default = [
+export const tiles = [
 	{
 		value: '...\r\n...\r\n...',
 		code: 'grass',
