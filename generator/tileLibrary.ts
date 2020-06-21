@@ -1,82 +1,86 @@
-export const tiles = [
+import {TileLibraryItem} from "../components/TileLibrary";
+
+const tiles = [
 	{
 		value: '...\r\n...\r\n...',
 		code: 'grass',
-		validNb: [
-			['grass', 'roadVert',  'roadCornerLB', 'roadCornerLT'], //left
-			['grass', 'roadHor', 'roadCornerLT', 'roadCornerRT'], //top
-			['grass', 'roadVert',  'roadCornerRB', 'roadCornerRT'], //right
-			['grass', 'roadHor', 'roadCornerLB', 'roadCornerRB']  //bottom
-		]
+		rules: [{
+            leftNb: ['grass', 'roadVert', 'roadCornerLB', 'roadCornerLT'], //left
+            topNb: ['grass', 'roadHor', 'roadCornerLT', 'roadCornerRT'], //top
+            rightNb: ['grass', 'roadVert', 'roadCornerRB', 'roadCornerRT'], //right
+            bottomNb: ['grass', 'roadHor', 'roadCornerLB', 'roadCornerRB']  //bottom
+        }]
 	},
 	{
 		value: '░║░\r\n░║░\r\n░║░',
 		code: 'roadVert',
-		validNb: [
-			['grass'], //left
-			['roadCross','roadVert', 'roadCornerLB', 'roadCornerRB'], //top
-			['grass'], //right
-			['roadCross','roadVert', 'roadCornerLT', 'roadCornerRT'], //bottom
-		]
+		rules: [{
+            leftNb: ['grass'], //left
+            topNb: ['roadCross', 'roadVert', 'roadCornerLB', 'roadCornerRB'], //top
+            rightNb: ['grass'], //right
+            bottomNb: ['roadCross', 'roadVert', 'roadCornerLT', 'roadCornerRT'], //bottom
+        }]
 	},
 	{
 		value: '░░░\r\n═══\r\n░░░',
 		code: 'roadHor',
-		validNb: [
-			['roadCross', 'roadHor', 'roadCornerRT', 'roadCornerRB'], //left
-			['grass'], //top
-			['roadCross', 'roadHor', 'roadCornerLT', 'roadCornerLB'], //right
-			['grass'], //bottom
-		]
+		rules: [{
+            leftNb: ['roadCross', 'roadHor', 'roadCornerRT', 'roadCornerRB'], //left
+            topNb: ['grass'], //top
+            rightNb: ['roadCross', 'roadHor', 'roadCornerLT', 'roadCornerLB'], //right
+            bottomNb: ['grass'], //bottom
+        }]
 	},
 	{
 		value: '░║░\r\n═╬═\r\n░║░',
 		code: 'roadCross',
-		validNb: [
-			[/*'roadCross',*/ 'roadHor', /*'roadCornerRT', 'roadCornerRB'*/], //left
-			[/*'roadCross',*/ 'roadVert'], //top
-			[/*'roadCross',*/ 'roadHor', /*'roadCornerLT', 'roadCornerLB'*/], //right
-			[/*'roadCross',*/ 'roadVert']  //bottom
-		]
+		rules: [{
+            leftNb: [/*'roadCross',*/ 'roadHor', /*'roadCornerRT', 'roadCornerRB'*/], //left
+            topNb: [/*'roadCross',*/ 'roadVert'], //top
+            rightNb: [/*'roadCross',*/ 'roadHor', /*'roadCornerLT', 'roadCornerLB'*/], //right
+            bottomNb: [/*'roadCross',*/ 'roadVert']  //bottom
+        }]
 	},
 	{
 		value: '░║░\r\n═╝░\r\n░░░',
 		code: 'roadCornerLT',
-		validNb: [
-			['roadHor'], //left
-			['roadVert'], //top
-			['grass'], //right
-			['grass']  //bottom
-		]
+		rules: [{
+            leftNb: ['roadHor'], //left
+            topNb: ['roadVert'], //top
+            rightNb: ['grass'], //right
+            bottomNb: ['grass']  //bottom
+        }]
 	},
 	{
 		value: '░║░\r\n░╚═\r\n░░░',
 		code: 'roadCornerRT',
-		validNb: [
-			['grass'], //left
-			['roadVert'], //top
-			[ 'roadHor'], //right
-			['grass']  //bottom
-		]
+		rules: [{
+            leftNb: ['grass'], //left
+            topNb: ['roadVert'], //top
+            rightNb: ['roadHor'], //right
+            bottomNb: ['grass']  //bottom
+        }]
 	},
 	{
 		value: '░░░\r\n═╗░\r\n░║░',
 		code: 'roadCornerLB',
-		validNb: [
-			['roadHor'], //left
-			['grass'], //top
-			['grass'], //right
-			['roadVert']  //bottom
-		]
+		rules: [{
+            leftNb: ['roadHor'], //left
+            topNb: ['grass'], //top
+            rightNb: ['grass'], //right
+            bottomNb: ['roadVert']  //bottom
+        }]
 	},
 	{
 		value: '░░░\r\n░╔═\r\n░║░',
 		code: 'roadCornerRB',
-		validNb: [
-			['grass'], //left
-			['grass'], //top
-			[ 'roadHor'], //right
-			['roadVert']  //bottom
-		]
+		rules: [{
+			leftNb: ['grass'], //left
+			topNb: ['grass'], //top
+			rightNb: [ 'roadHor'], //right
+			bottomNb: ['roadVert']  //bottom
+		}]
 	}
-];
+] as TileLibraryItem[];
+
+export default tiles;

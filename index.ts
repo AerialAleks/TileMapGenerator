@@ -1,5 +1,5 @@
-import * as mapGenerator from './generator'
 import * as http from 'http';
+import {Grid} from "./components/Grid";
 // const url = require('url');
 
 const VER = 'v0.1.0';
@@ -34,11 +34,10 @@ console.log(`Listening @ ${PORT}`);
 function generate(req, res) {
 	res.writeHead(200, {'Content-Type': 'application/json'});
 	console.log('index --->>>>>  generating');
-	const map = mapGenerator.generate(16).map(el => [...el]);
-	console.log('index --->>>>>  printing');
-	mapGenerator.print(map, true);
+    const grid = Grid.generate(16, 16);
+    grid.print(true);
 	console.log('index --->>>>>  writing');
-	res.write(JSON.stringify(map));
+	res.write(JSON.stringify(grid.pack()));
 	res.end();
 
 }
