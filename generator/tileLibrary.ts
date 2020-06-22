@@ -138,7 +138,150 @@ const tiles = [
 			rightNb: [ 'roadHor'], //right
 			bottomNb: ['roadVert']  //bottom
 		}]
-	}
+	},
+    {
+        value: '~~~\r\n~~~\r\n~~~',
+        code: 'water',
+        tags: {
+            topTag: 'water',
+            rightTag: 'water',
+            bottomTag: 'water',
+            leftTag: 'water',
+        },
+        rules: []
+    },
+    {
+        value: '~,.\r\n~,.\r\n~,.',
+        code: 'shoreLR',
+        tags: {
+            topTag: 'shoreVR',
+            rightTag: 'grass',
+            bottomTag: 'shoreVR',
+            leftTag: 'water',
+        },
+        rules: []
+    },
+    {
+        value: '.,~\r\n.,~\r\n.,~',
+        code: 'shoreRL',
+        tags: {
+            topTag: 'shoreVL',
+            rightTag: 'water',
+            bottomTag: 'shoreVL',
+            leftTag: 'grass',
+        },
+        rules: []
+    },
+    {
+        value: '...\r\n,,,\r\n~~~',
+        code: 'shoreTB',
+        tags: {
+            topTag: 'grass',
+            rightTag: 'shoreHT',
+            bottomTag: 'water',
+            leftTag: 'shoreHT',
+        },
+        rules: []
+    },
+    {
+        value: '~~~\r\n,,,\r\n...',
+        code: 'shoreBT',
+        tags: {
+            topTag: 'water',
+            rightTag: 'shoreHB',
+            bottomTag: 'grass',
+            leftTag: 'shoreHB',
+        },
+        rules: []
+    },
+    {
+        value: '...\r\n,,.\r\n~,.',
+        code: 'shoreAngleTR',
+        tags: {
+            topTag: 'grass',
+            rightTag: 'grass',
+            bottomTag: 'shoreVR',
+            leftTag: 'shoreHT',
+        },
+        rules: []
+    },
+    {
+        value: '...\r\n.,,\r\n.,~',
+        code: 'shoreAngleTL',
+        tags: {
+            topTag: 'grass',
+            rightTag: 'shoreHT',
+            bottomTag: 'shoreVL',
+            leftTag: 'grass',
+        },
+        rules: []
+    },
+    {
+        value: '.,~\r\n.,,\r\n...',
+        code: 'shoreAngleBL',
+        tags: {
+            topTag: 'shoreVL',
+            rightTag: 'shoreHB',
+            bottomTag: 'grass',
+            leftTag: 'grass',
+        },
+        rules: []
+    },
+    {
+        value: '~,.\r\n,,.\r\n...',
+        code: 'shoreAngleBR',
+        tags: {
+            topTag: 'shoreVR',
+            rightTag: 'grass',
+            bottomTag: 'grass',
+            leftTag: 'shoreHB',
+        },
+        rules: []
+    },
+    {
+        value: '.,~\r\n,,~\r\n~~~',
+        code: 'shoreAngleWBR',
+        tags: {
+            topTag: 'shoreVL',
+            rightTag: 'water',
+            bottomTag: 'water',
+            leftTag: 'shoreHT',
+        },
+        rules: []
+    },
+    {
+        value: '~,.\r\n~,,\r\n~~~',
+        code: 'shoreAngleWBL',
+        tags: {
+            topTag: 'shoreVR',
+            rightTag: 'shoreHT',
+            bottomTag: 'water',
+            leftTag: 'water',
+        },
+        rules: []
+    },
+    {
+        value: '~~~\r\n,,~\r\n.,~',
+        code: 'shoreAngleWTR',
+        tags: {
+            topTag: 'water',
+            rightTag: 'water',
+            bottomTag: 'shoreVL',
+            leftTag: 'shoreHB',
+        },
+        rules: []
+    },
+    {
+        value: '~~~\r\n~,,\r\n~,.',
+        code: 'shoreAngleWTL',
+        tags: {
+            topTag: 'water',
+            rightTag: 'shoreHB',
+            bottomTag: 'shoreVR',
+            leftTag: 'water',
+        },
+        rules: []
+    }
 ] as TileLibraryItem[];
 
 export default tiles;
