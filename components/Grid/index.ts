@@ -1,6 +1,14 @@
 import {Tile} from "../Tile";
 import {getRandomNumber} from "../../utils";
 
+export interface PackedGrid {
+    size: {
+        rows: number,
+        columns: number,
+    },
+    rows: Array<string[]>
+}
+
 class Row {
     readonly cellCount: number;
     readonly rowNumber: number;
@@ -225,8 +233,8 @@ export class Grid {
 
     }
 
-    pack() {
-        let res = {
+    pack(): PackedGrid {
+        let res: PackedGrid = {
             size: {
                 rows: this.rowsCount,
                 columns: this.cellCount
@@ -237,6 +245,17 @@ export class Grid {
             res.rows[i] = [];
             for (let j = 0; j < this.cellCount; j++) {
                 res.rows[i][j] = this.getTile(j, i).code;
+            }
+        }
+        return res;
+    }
+
+    static unPack(packedGrid: PackedGrid, unsafe = false): Grid {
+        let res = new Grid(packedGrid.size.rows, packedGrid.size.columns);
+        for (let rowIndex in packedGrid.rows) {
+            for (let cellIndex in packedGrid.rows[rowIndex]) {
+                const tile = res.getTile(cellIndex, rowIndex);
+                tile.setCode(packedGrid.rows[rowIndex][cellIndex], unsafe)
             }
         }
         return res;
