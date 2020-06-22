@@ -144,8 +144,8 @@ export class Grid {
         return returnValue
     }
 
-    getEmptyTiles(): Tile[] {
-        const returnValue = [];
+    getEmptyTiles(entropy = false): Tile[] {
+        const returnValue: Tile[] = [];
         for (const row of this.rows) {
             for (let i = 0; i < row.cellCount; i++) {
                 const cell = row.getTile(i);
@@ -154,7 +154,20 @@ export class Grid {
                 }
             }
         }
-        return returnValue;
+        if (!entropy) {
+            return returnValue;
+        }
+        const entropyMap = returnValue.map(el => this.getEntropy(el.x, el.y));
+        let maxEntropy = [...entropyMap].sort()[entropyMap.length-1];
+        if (maxEntropy === 1) {
+            maxEntropy +=1
+        }
+        return returnValue.filter((el, i) => entropyMap[i] >= maxEntropy-1);
+    }
+
+    getEntropy(x: number, y: number) {
+        const nbs = Object.values(this.getNeighbours(x, y));
+        return Object.values(this.getNeighbours(x, y)).filter(el => Boolean(el) && (el as Tile).code !== 'none').length;
     }
 
     static generate(xSize: number, ySize: number, forceRecreate = false): Grid {
@@ -162,16 +175,21 @@ export class Grid {
         return grid.generate(forceRecreate)
     }
 
-    wipeTileAndNeighbour(x: number, y: number) {
+    wipeTileAndNeighbour(x: number, y: number, depth = 0) {
         for (let neighbour of Object.values(this.getNeighbours(x,y))) {
             if (neighbour) {
-                neighbour.setCode('none');
+                if (depth > 0) {
+                    this.wipeTileAndNeighbour(neighbour.x, neighbour.y, depth-1)
+                } else {
+                    neighbour.setCode('none');
+                }
             }
         }
         this.getTile(x, y).setCode('none');
     }
 
     generate(forceRecreate = false): Grid {
+        const useEntropy = true;
         if (!forceRecreate && !this.checkGrid()) {
             throw new Error('Grid already broken')
         } else if (forceRecreate) {
@@ -182,14 +200,14 @@ export class Grid {
             const possibleTileCodes = tileToFill.getPossibleTilesCodes();
             // Если поставить нечего то значит ситуация невозможная и стираю соседей, что бы их перегенерировать
             if (possibleTileCodes.length === 0) {
-                this.wipeTileAndNeighbour(tileToFill.x, tileToFill.y);
+                this.wipeTileAndNeighbour(tileToFill.x, tileToFill.y, useEntropy ? 1 : 0);
             }
             tileToFill.setCode(possibleTileCodes[getRandomNumber(possibleTileCodes.length, 0)], true);
         };
-        let emptyTiles = this.getEmptyTiles();
+        let emptyTiles = this.getEmptyTiles(useEntropy);
         while (emptyTiles.length > 0) {
             setRandomTile(emptyTiles);
-            emptyTiles = this.getEmptyTiles();
+            emptyTiles = this.getEmptyTiles(useEntropy);
         }
         // Если все хорошо то отдаем, иначе перегенерируем
         if (this.checkGrid()) {
