@@ -46,10 +46,11 @@ export class Tile {
         return Tile.getPossibleTilesCodes(this.grid, this.x, this.y);
     }
 
-    setCode(code: string): void {
+    // unsafe выключает проверку на корректность и тогда я потенциально могу сделать карту невалидной. Зато выполнится быстрее
+    setCode(code: string, unsafe = false): void {
         const tile = tileLibrary.getByCode(code);
         if (tile) {
-            if (!this.frozen && Tile.checkPlacement(this.grid, this.x, this.y, code)) {
+            if (!this.frozen && (unsafe || Tile.checkPlacement(this.grid, this.x, this.y, code))) {
                 this.code = tile.code;
                 this.previewValue = tile.previewValue;
             }

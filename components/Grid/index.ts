@@ -176,19 +176,19 @@ export class Grid {
             if (possibleTileCodes.length === 0) {
                 this.wipeTileAndNeighbour(tileToFill.x, tileToFill.y);
             }
-            tileToFill.setCode(possibleTileCodes[getRandomNumber(possibleTileCodes.length, 0)]);
-            // Немного паранойи не помешает - если после установки тайла карта ломается - откатываемся;
-            if (!this.checkGrid()) {
-                this.print(true);
-                this.wipeTileAndNeighbour(tileToFill.x, tileToFill.y);
-            }
+            tileToFill.setCode(possibleTileCodes[getRandomNumber(possibleTileCodes.length, 0)], true);
         };
         let emptyTiles = this.getEmptyTiles();
         while (emptyTiles.length > 0) {
             setRandomTile(emptyTiles);
             emptyTiles = this.getEmptyTiles();
         }
-        return this;
+        // Если все хорошо то отдаем, иначе перегенерируем
+        if (this.checkGrid()) {
+            return this;
+        } else {
+            this.generate(true);
+        }
     }
 
     print(indexed = false): void {
@@ -227,6 +227,10 @@ export class Grid {
 
     pack() {
         let res = {
+            size: {
+                rows: this.rowsCount,
+                columns: this.cellCount
+            },
             rows: []
         };
         for (let i = 0; i < this.rowsCount; i++) {
