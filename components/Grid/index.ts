@@ -195,6 +195,8 @@ export class Grid {
         if (this.checkGrid()) {
             return this;
         } else {
+            console.warn('Something is wrong... Regenerating');
+            this.print(true);
             this.generate(true);
         }
     }

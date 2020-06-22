@@ -1,20 +1,37 @@
 import {TileLibraryItem} from "../components/TileLibrary";
 
 const tiles = [
-	{
-		value: '...\r\n...\r\n...',
-		code: 'grass',
-		rules: [{
-            leftNb: ['grass', 'roadVert', 'roadCornerLB', 'roadCornerLT'], //left
-            topNb: ['grass', 'roadHor', 'roadCornerLT', 'roadCornerRT'], //top
-            rightNb: ['grass', 'roadVert', 'roadCornerRB', 'roadCornerRT'], //right
-            bottomNb: ['grass', 'roadHor', 'roadCornerLB', 'roadCornerRB']  //bottom
+    {
+        value: '...\r\n...\r\n...',
+        code: 'grass',
+        tags: {
+            topTag: 'grass',
+            rightTag: 'grass',
+            bottomTag: 'grass',
+            leftTag: 'grass'
+        },
+        rules: [{
+            topTag: 'grass',
+            bottomTag: 'grass',
+            rightTag: 'grass',
+            leftTag: 'grass'
         }]
-	},
+    },
 	{
 		value: '░║░\r\n░║░\r\n░║░',
 		code: 'roadVert',
+        tags: {
+            topTag: 'road',
+            rightTag: 'grass',
+            bottomTag: 'road',
+            leftTag: 'grass'
+        },
 		rules: [{
+            topTag: 'road',
+            rightTag: 'grass',
+            bottomTag: 'road',
+            leftTag: 'grass'
+        }, {
             leftNb: ['grass'], //left
             topNb: ['roadCross', 'roadVert', 'roadCornerLB', 'roadCornerRB'], //top
             rightNb: ['grass'], //right
@@ -24,7 +41,18 @@ const tiles = [
 	{
 		value: '░░░\r\n═══\r\n░░░',
 		code: 'roadHor',
+        tags: {
+            topTag: 'grass',
+            rightTag: 'road',
+            bottomTag: 'grass',
+            leftTag: 'road'
+        },
 		rules: [{
+            topTag: 'grass',
+            rightTag: 'road',
+            bottomTag: 'grass',
+            leftTag: 'road'
+        }, {
             leftNb: ['roadCross', 'roadHor', 'roadCornerRT', 'roadCornerRB'], //left
             topNb: ['grass'], //top
             rightNb: ['roadCross', 'roadHor', 'roadCornerLT', 'roadCornerLB'], //right
@@ -34,7 +62,18 @@ const tiles = [
 	{
 		value: '░║░\r\n═╬═\r\n░║░',
 		code: 'roadCross',
+        tags: {
+            topTag: 'road',
+            rightTag: 'road',
+            bottomTag: 'road',
+            leftTag: 'road'
+        },
 		rules: [{
+            topTag: 'road',
+            rightTag: 'road',
+            bottomTag: 'road',
+            leftTag: 'road'
+        }, {
             leftNb: [/*'roadCross',*/ 'roadHor', /*'roadCornerRT', 'roadCornerRB'*/], //left
             topNb: [/*'roadCross',*/ 'roadVert'], //top
             rightNb: [/*'roadCross',*/ 'roadHor', /*'roadCornerLT', 'roadCornerLB'*/], //right
@@ -44,6 +83,12 @@ const tiles = [
 	{
 		value: '░║░\r\n═╝░\r\n░░░',
 		code: 'roadCornerLT',
+        tags: {
+            topTag: 'road',
+            rightTag: 'grass',
+            bottomTag: 'grass',
+            leftTag: 'road'
+        },
 		rules: [{
             leftNb: ['roadHor'], //left
             topNb: ['roadVert'], //top
@@ -54,6 +99,12 @@ const tiles = [
 	{
 		value: '░║░\r\n░╚═\r\n░░░',
 		code: 'roadCornerRT',
+        tags: {
+            topTag: 'road',
+            rightTag: 'road',
+            bottomTag: 'grass',
+            leftTag: 'grass'
+        },
 		rules: [{
             leftNb: ['grass'], //left
             topNb: ['roadVert'], //top
@@ -64,6 +115,12 @@ const tiles = [
 	{
 		value: '░░░\r\n═╗░\r\n░║░',
 		code: 'roadCornerLB',
+        tags: {
+            topTag: 'grass',
+            rightTag: 'grass',
+            bottomTag: 'road',
+            leftTag: 'road'
+        },
 		rules: [{
             leftNb: ['roadHor'], //left
             topNb: ['grass'], //top
@@ -74,6 +131,12 @@ const tiles = [
 	{
 		value: '░░░\r\n░╔═\r\n░║░',
 		code: 'roadCornerRB',
+        tags: {
+            topTag: 'grass',
+            rightTag: 'road',
+            bottomTag: 'road',
+            leftTag: 'grass'
+        },
 		rules: [{
 			leftNb: ['grass'], //left
 			topNb: ['grass'], //top

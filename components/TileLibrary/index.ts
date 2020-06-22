@@ -31,10 +31,12 @@ class TileLibraryTile {
     code: string;
     previewValue: string;
     rules: TileRule[] = [];
+    tags: RuleSimpleTag;
 
     constructor(item: TileLibraryItem) {
         this.code = item.code;
         this.previewValue = item.value;
+        this.tags = item.tags;
         for (let rule of item.rules) {
             this.rules.push(new TileRule(rule))
         }
@@ -55,7 +57,21 @@ class TileLibraryTile {
     }
 }
 
-type RuleType = string | { topNb?: string[], rightNb?: string[], bottomNb?: string[], leftNb?: string[] }
+type RulePredicate = string;
+type RuleSimpleNb = {
+    topNb?: string[],
+    rightNb?: string[],
+    bottomNb?: string[],
+    leftNb?: string[],
+}
+type RuleSimpleTag = {
+    topTag?: string,
+    rightTag?: string,
+    bottomTag?: string,
+    leftTag?: string,
+}
+
+type RuleType = RulePredicate | RuleSimpleNb & RuleSimpleTag
 export type neighbours = {
     top: string
     right: string
@@ -107,11 +123,21 @@ class TileRule {
     }
 
     private runSimple(nbs: neighbours): boolean {
+        const oppositeSides = {
+            top: 'bottom',
+            left: 'right',
+            bottom: 'top',
+            right: 'left'
+        }
         // console.warn('private TileRule.runSimple placeholder!');
         let valid = true;
         for (let side of ['top', 'right', 'bottom', 'left']) {
-            if (valid && nbs[side] && nbs[side] !== 'none') {
+            const nbTile = tileLibrary.getByCode(nbs[side]);
+            if (valid && nbs[side] && nbs[side] !== 'none' && this.simpleRule[`${side}Nb`]) {
                 valid = this.simpleRule[`${side}Nb`].includes(nbs[side]);
+            }
+            if (valid && nbTile && this.simpleRule[`${side}Tag`]) {
+                valid = this.simpleRule[`${side}Tag`] === nbTile.tags[`${oppositeSides[side]}Tag`];
             }
         }
         return valid;
@@ -124,12 +150,14 @@ class TileRule {
 export type TileLibraryItem = {
     code: string;
     value: string;
+    tags: RuleSimpleTag,
     // rules - массив, элементами могут быть как predicate который будет выполнен (в виде строки) либо в виде объекта
-    // описывающего список возможных соседей этого тайла по кодам. Что бы позиция считалась валидной, надо что бы все
-    // условия в массиве были удовлетворены. Правила проверяются по порядку в массиве, имеет смысл в начало массива
-    // размещать самые "простые" правила, либо правила сильнее всего отсеивающие некоректные варианты
+    // описывающего список возможных соседей этого тайла по кодам или по тегам.
+    // Что бы позиция считалась валидной, надо что бы все условия в массиве были удовлетворены.
+    // Правила проверяются по порядку в массиве, имеет смысл в начало массива размещать самые "простые" правила,
+    // либо правила сильнее всего отсеивающие некоректные варианты
     // Сигнатура predicate - (grid: Grid, x: number, y: number) => Boolean
-    rules: Array<RuleType>
+    rules: Array<RuleType>;
 }
 
 
