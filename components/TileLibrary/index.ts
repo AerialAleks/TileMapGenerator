@@ -11,6 +11,10 @@ class TileLibrary {
 
     init() {
         for (let tile of tiles) {
+            if (this.library[tile.code]) {
+                this.library = {};
+                throw new Error('Library initialization error - Duplicated tile code found!')
+            }
             this.library[tile.code] = new TileLibraryTile(tile);
         }
     }
@@ -129,7 +133,7 @@ class TileRule {
             left: 'right',
             bottom: 'top',
             right: 'left'
-        }
+        };
         // console.warn('private TileRule.runSimple placeholder!');
         let valid = true;
         for (let side of ['top', 'right', 'bottom', 'left']) {
@@ -148,8 +152,8 @@ class TileRule {
 /**
  * Тип описывает как хранятся тайлы в библиотеке в json до загрузки.
  */
-export type TileLibraryItem = {
-    code: string;
+export interface TileLibraryItem {
+    code: string; // Должен быть уникален
     value: string;
     tags: RuleSimpleTag,
     // rules - массив, элементами могут быть как predicate который будет выполнен (в виде строки) либо в виде объекта

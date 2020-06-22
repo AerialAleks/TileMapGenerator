@@ -16,8 +16,8 @@ http.createServer(function (req, res) {
 	// console.log(req);
 	console.log(`${new Date} --- index --->>>>>  got request: ${req.headers.host}${req.url}`);
 
-	switch (req.url) {
-		case "/generate": {
+	switch (true) {
+		case /\/generate/.test(req.url): {
 			generate(req, res);
 			break
 		}
@@ -34,7 +34,8 @@ console.log(`Listening @ ${PORT}`);
 function generate(req, res) {
 	res.writeHead(200, {'Content-Type': 'application/json'});
 	console.log('index --->>>>>  generating');
-    const grid = Grid.generate(16, 16);
+    const grid = new Grid(16, 16);
+    grid.generate();
     grid.print(true);
 	console.log('index --->>>>>  writing');
 	res.write(JSON.stringify(grid.pack()));
