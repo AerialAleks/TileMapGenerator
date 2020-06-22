@@ -37,6 +37,7 @@ class TileLibraryTile {
         this.code = item.code;
         this.previewValue = item.value;
         this.tags = item.tags;
+        this.rules.push(new TileRule(item.tags));
         for (let rule of item.rules) {
             this.rules.push(new TileRule(rule))
         }

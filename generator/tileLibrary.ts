@@ -10,12 +10,7 @@ const tiles = [
             bottomTag: 'grass',
             leftTag: 'grass'
         },
-        rules: [{
-            topTag: 'grass',
-            bottomTag: 'grass',
-            rightTag: 'grass',
-            leftTag: 'grass'
-        }]
+        rules: []
     },
 	{
 		value: '░║░\r\n░║░\r\n░║░',
