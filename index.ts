@@ -1,5 +1,6 @@
 import * as http from 'http';
 import {Grid} from "./components/Grid";
+const fs = require('fs');
 // const url = require('url');
 
 const VER = 'v0.1.0';
@@ -21,6 +22,10 @@ http.createServer(function (req, res) {
 			generate(req, res);
 			break
 		}
+		case /\/visualizer?.*/.test(req.url): {
+			visualize(req, res);
+			break
+		}
 		default: {
 			res.writeHead(404);
 			res.end('Dunno what are you talkin \'bout');
@@ -34,11 +39,31 @@ console.log(`Listening @ ${PORT}`);
 function generate(req, res) {
 	res.writeHead(200, {'Content-Type': 'application/json'});
 	console.log('index --->>>>>  generating');
-    const grid = new Grid(16, 16);
+    const grid = new Grid(32, 32);
     grid.generate();
     grid.print(true);
 	console.log('index --->>>>>  writing');
 	res.write(JSON.stringify(grid.pack()));
 	res.end();
+
+}
+
+function visualize(req, res) {
+    let filename = '';
+    if (req.url === '/visualizer') {
+        filename = __dirname + '/visualizer/index.html'
+    } else {
+        filename = __dirname + req.url;
+    }
+    console.log(`visualizer --->>>>>  reading ${filename}`);
+    fs.readFile(filename, function (err,data) {
+        if (err) {
+            res.writeHead(404);
+            res.end(JSON.stringify(err));
+            return;
+        }
+        res.writeHead(200);
+        res.end(data);
+    });
 
 }
