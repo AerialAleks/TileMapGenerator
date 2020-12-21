@@ -1,11 +1,14 @@
 import {Tile} from "../Tile";
 import {getRandomNumber} from "../../utils";
+import * as uuid from 'uuid';
+import * as seedrandom from "seedrandom";
 
 export interface PackedGrid {
     size: {
         rows: number,
         columns: number,
     },
+    seed: string,
     rows: Array<string[]>
 }
 
@@ -44,8 +47,13 @@ export class Grid {
     readonly rowsCount: number;
     readonly cellCount: number;
     private readonly rows: Row[] = [];
+    private readonly rng: seedrandom.prng;
 
-    constructor(rowCount: number, cellCount?: number) {
+    constructor(
+      public seed: string,
+      rowCount: number,
+      cellCount?: number,
+    ) {
         if (!cellCount) {
             cellCount = rowCount;
         }
@@ -57,6 +65,7 @@ export class Grid {
         }
         this.rowsCount = rowCount;
         this.cellCount = cellCount;
+        this.rng = seedrandom(seed);
         this.initGrid()
     }
 
@@ -170,8 +179,8 @@ export class Grid {
         return Object.values(this.getNeighbours(x, y)).filter(el => Boolean(el) && (el as Tile).code !== 'none').length;
     }
 
-    static generate(xSize: number, ySize: number, forceRecreate = false): Grid {
-        const grid = new Grid(xSize, ySize);
+    static generate(xSize: number, ySize: number, forceRecreate = false, seed = uuid.v4()): Grid {
+        const grid = new Grid(seed,  xSize, ySize);
         return grid.generate(forceRecreate)
     }
 
@@ -190,32 +199,36 @@ export class Grid {
 
     generate(forceRecreate = false): Grid {
         const useEntropy = true;
+
         if (!forceRecreate && !this.checkGrid()) {
             throw new Error('Grid already broken')
         } else if (forceRecreate) {
             this.initGrid();
         }
+
         const setRandomTile = (emptyTiles: Tile[]) => {
-            const tileToFill = emptyTiles[getRandomNumber(emptyTiles.length - 1, 0)];
+            const tileToFill = emptyTiles[getRandomNumber(emptyTiles.length - 1, 0, this.rng)];
             const possibleTileCodes = tileToFill.getPossibleTilesCodes();
             // Если поставить нечего то значит ситуация невозможная и стираю соседей, что бы их перегенерировать
             if (possibleTileCodes.length === 0) {
-                this.wipeTileAndNeighbour(tileToFill.x, tileToFill.y, useEntropy ? 1 : 0);
+                this.wipeTileAndNeighbour(tileToFill.x, tileToFill.y, useEntropy ? 2 : 1);
             }
-            tileToFill.setCode(possibleTileCodes[getRandomNumber(possibleTileCodes.length, 0)], true);
+            tileToFill.setCode(possibleTileCodes[getRandomNumber(possibleTileCodes.length, 0, tileToFill.rng)], true);
         };
+
         let emptyTiles = this.getEmptyTiles(useEntropy);
         while (emptyTiles.length > 0) {
             setRandomTile(emptyTiles);
             emptyTiles = this.getEmptyTiles(useEntropy);
         }
+
         // Если все хорошо то отдаем, иначе перегенерируем
         if (this.checkGrid()) {
             return this;
         } else {
             console.warn('Something is wrong... Regenerating');
             this.print(true);
-            this.generate(true);
+            return this.generate(true);
         }
     }
 
@@ -227,7 +240,7 @@ export class Grid {
             let str2 = ` \t`;
             for (let x = 0; x < this.cellCount; x++) {
                 str0 += `   |`;
-                str1 += `| ${x} `;
+                str1 += `|${x.toString().padStart(3, '0')}`;
                 str2 += '+---'
             }
             console.log(str0);
@@ -259,6 +272,7 @@ export class Grid {
                 rows: this.rowsCount,
                 columns: this.cellCount
             },
+            seed: this.seed,
             rows: []
         };
         for (let i = 0; i < this.rowsCount; i++) {
@@ -271,7 +285,7 @@ export class Grid {
     }
 
     static unPack(packedGrid: PackedGrid, unsafe = false): Grid {
-        let res = new Grid(packedGrid.size.rows, packedGrid.size.columns);
+        let res = new Grid(packedGrid.seed, packedGrid.size.rows, packedGrid.size.columns);
         for (let rowIndex in packedGrid.rows) {
             for (let cellIndex in packedGrid.rows[rowIndex]) {
                 const tile = res.getTile(cellIndex, rowIndex);

@@ -1,20 +1,15 @@
 import * as http from 'http';
 import {Grid} from "./components/Grid";
 const fs = require('fs');
-// const url = require('url');
+import * as uuid from 'uuid';
 
-const VER = 'v0.1.0';
+const VER = process.env.npm_package_version;
 const PORT = process.env.PORT && Number(process.env.PORT) || 8080;
 
 console.log(VER);
 
-// ToDo TYPESCRIPT!!!!!!
-
-// mapGenerator.print(mapGenerator.generate(16));
-
 http.createServer(function (req, res) {
 	const start = new Date().getTime();
-	// console.log(req);
 	console.log(`${new Date} --- index --->>>>>  got request: ${req.headers.host}${req.url}`);
 
 	switch (true) {
@@ -39,13 +34,13 @@ console.log(`Listening @ ${PORT}`);
 function generate(req, res) {
 	res.writeHead(200, {'Content-Type': 'application/json'});
 	console.log('index --->>>>>  generating');
-    const grid = new Grid(32, 32);
-    grid.generate();
-    grid.print(true);
+	const seed = /\/generate\/?(.*)\/?/.exec(req.url)[1] || uuid.v4();
+	const grid = new Grid(seed, 32, 32);
+	grid.generate()
+	grid.print(true);
 	console.log('index --->>>>>  writing');
 	res.write(JSON.stringify(grid.pack()));
 	res.end();
-
 }
 
 function visualize(req, res) {
@@ -65,5 +60,4 @@ function visualize(req, res) {
         res.writeHead(200);
         res.end(data);
     });
-
 }

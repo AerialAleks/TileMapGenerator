@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "start": "ts-node index.ts",
+    "start": "node %NODE_DEBUG_OPTION% -r ts-node/register ./index.ts",
     "startSimple": "ts-node runGenerator.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,9 +12,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/seedrandom": "^2.4.28",
+    "@types/uuid": "^8.3.0",
+    "seedrandom": "^3.0.5",
     "socket.io": "^2.3.0",
     "ts-node": "^8.10.1",
-    "typescript": "^3.9.3"
+    "typescript": "^3.9.3",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/node": "^14.0.5"

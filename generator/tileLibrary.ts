@@ -1,6 +1,6 @@
 import {TileLibraryItem} from "../components/TileLibrary";
 
-const tiles = [
+const tiles:TileLibraryItem[] = [
     {
         value: '...\r\n...\r\n...',
         code: 'grass',
@@ -282,6 +282,6 @@ const tiles = [
         },
         rules: []
     }
-] as TileLibraryItem[];
+];
 
 export default tiles;

@@ -163,6 +163,7 @@ export interface TileLibraryItem {
     // либо правила сильнее всего отсеивающие некоректные варианты
     // Сигнатура predicate - (grid: Grid, x: number, y: number) => Boolean
     rules: Array<RuleType>;
+    elevations?: number[] // Если тайл меняет высоту (например гора) то тут описываются смены высоты по граням, начиная с верхней, по часовой стрелке
 }
 
 

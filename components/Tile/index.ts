@@ -1,5 +1,6 @@
 import {Grid} from "../Grid";
 import tileLibrary from "../TileLibrary";
+import * as seedrandom from 'seedrandom';
 
 export class Tile {
     frozen: boolean = false;
@@ -7,6 +8,8 @@ export class Tile {
     previewValue: string = '';
     x: number;
     y: number;
+    rng: seedrandom.prng;
+    level: number = 0; // Уровень над уровнем моря
 
     constructor(
         x: number,
@@ -15,6 +18,7 @@ export class Tile {
     ) {
         this.x = x;
         this.y = y;
+        this.rng = seedrandom(`${grid.seed}-x${x}-y${y}`);
         // console.warn('Tile.constructor placeholder!');
     }
 

@@ -23,9 +23,11 @@ const tileMapAssets = {
 };
 
 const mapContainer = document.querySelector('.map');
+const seedInput= document.getElementById('mapSeed');
 
 async function getData() {
-	const response = await fetch('/generate');
+	const seed = seedInput.shouldClear ? '' : seedInput.value || '';
+	const response = await fetch(`/generate/${seed}`);
 	return await response.json();
 }
 
@@ -37,7 +39,7 @@ function print(rows) {
 		for (let cell of row) {
 			const cellEl = document.createElement('div');
 			cellEl.className = 'tile';
-			cellEl.style.setProperty('background-image', `url(/visualizer/assets/tiles/${tileMapAssets[cell]})`)
+			cellEl.style.setProperty('background-image', `url(/visualizer/assets/tiles/${tileMapAssets[cell]})`);
 			rowEl.appendChild(cellEl)
 		}
 		mapContainer.appendChild(rowEl);
@@ -48,7 +50,10 @@ async function makeMap() {
 	mapContainer.classList.add('loader');
 	const data = await getData();
 	print(data.rows);
+	seedInput.shouldClear = true;
+	seedInput.placeholder = data.seed;
 	mapContainer.classList.remove('loader');
 }
 
+seedInput.addEventListener('focus', () => seedInput.value = seedInput.placeholder);
 document.getElementById('getMap').addEventListener('click', makeMap);
